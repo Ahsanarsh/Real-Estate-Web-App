@@ -1,16 +1,20 @@
 import express from "express";
 import cors from "cors";
-import { router } from "./routes/index.js";
+import cookieParser from "cookie-parser";
+import router from "./routes/auth.route.js";
+import config from "./config/config.js";
+import morgan from "morgan";
 
 const app = express();
-const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(morgan("dev"));
+app.use(cookieParser());
 
 app.use("/api", router);
 
-app.listen(PORT, () => {
-  console.log("Server is running on port 3000");
+app.listen(config.port, () => {
+  console.log(`Server is running on port ${config.port}`);
 });
