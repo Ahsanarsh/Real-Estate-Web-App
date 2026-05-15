@@ -1,10 +1,9 @@
-@use "./responsive.scss" as *;
+@import "../../responsive.scss";
 
 .layout {
   background-color: white;
-  height: 110vh;
+  // height: 110vh;
   max-width: 95vw;
-  margin: auto;
 
   @include lg {
     background-color: rgb(243, 195, 177);

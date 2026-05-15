@@ -1,3 +1,5 @@
+import Navbar from "../../components/navbar/Navbar";
+import SearchBar from "../../components/searchbar/SearchBar";
 import "./HomePage.scss";
 
 function HomePage() {
@@ -12,6 +14,7 @@ function HomePage() {
             distinctio? Officia libero eius obcaecati, harum autem est dolorem.
             Tempore a cumque pariatur.
           </p>
+          <SearchBar />
           <div className="stats">
             <div className="stat">
               <h2>16+</h2>
