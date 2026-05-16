@@ -1,9 +1,18 @@
 import HomePage from "./pages/homepage/HomePage";
-import { Layout } from "./pages/Layout/Layout";
-import ListPage from "./pages/listpage/ListPage";
-import SinglePage from "./pages/singlepage/SinglePage";
-import LoginPage from "./pages/loginpage/LoginPage";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import ListPage from "./pages/listpage/ListPage";
+import { Layout, RequireAuth } from "./pages/Layout/Layout";
+import SinglePage from "./pages/singlepage/SinglePage";
+import ProfilePage from "./pages/profilepage/ProfilePage";
+import Login from "./pages/loginpage/LoginPage";
+import Register from "./pages/register/Register";
+import ProfileUpdatePage from "./pages/profileupdatepage/ProfileUpdatePage";
+import NewPostPage from "./pages/newPostPage/NewPostPage";
+import {
+  listPageLoader,
+  profilePageLoader,
+  singlePageLoader,
+} from "./lib/loader";
 
 function App() {
   const router = createBrowserRouter([
@@ -18,14 +27,40 @@ function App() {
         {
           path: "/list",
           element: <ListPage />,
+          loader: listPageLoader,
         },
         {
           path: "/:id",
           element: <SinglePage />,
+          loader: singlePageLoader,
+        },
+
+        {
+          path: "/login",
+          element: <Login />,
         },
         {
-          path: "/loginpage",
-          element: <LoginPage />,
+          path: "/register",
+          element: <Register />,
+        },
+      ],
+    },
+    {
+      path: "/",
+      element: <RequireAuth />,
+      children: [
+        {
+          path: "/profile",
+          element: <ProfilePage />,
+          loader: profilePageLoader,
+        },
+        {
+          path: "/profile/update",
+          element: <ProfileUpdatePage />,
+        },
+        {
+          path: "/add",
+          element: <NewPostPage />,
         },
       ],
     },
