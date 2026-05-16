@@ -20,9 +20,6 @@ const register = async (req, res) => {
         password: hashedPassword,
       },
     });
-
-    console.log(newUser);
-    res.status(201).json({ message: "User registered successfully" });
   } catch (error) {
     res.status(500).json({ message: "Failed to register user" });
   }
@@ -51,17 +48,27 @@ const login = async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    const token = jwt.sign({ userId: user.id }, config.JWT_SECRET_KEY, {
-      expiresIn: "1h",
-    });
+    const token = jwt.sign(
+      {
+        userId: user.id,
+        isAdmin: true,
+      },
+      config.JWT_SECRET_KEY,
+      {
+        expiresIn: "1h",
+      },
+    );
 
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "strict",
-    });
+    const { password: userPassword, ...userInfo } = user;
 
-    res.status(200).json({ message: "Login successful" });
+    res
+      .cookie("token", token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict",
+      })
+      .status(200)
+      .json(userInfo);
   } catch (error) {
     res.status(500).json({ message: "Failed to login" });
   }
