@@ -20,23 +20,26 @@ const register = async (req, res) => {
         password: hashedPassword,
       },
     });
+
+    res.status(201).json({ message: "User created successfully" });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: "Failed to register user" });
   }
 };
 
 const login = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { username, password } = req.body;
 
-    if (!email || !password) {
+    if (!username || !password) {
       return res
         .status(400)
-        .json({ message: "Email and password are required" });
+        .json({ message: "Username and password are required" });
     }
     const user = await prisma.user.findUnique({
       where: {
-        email,
+        username,
       },
     });
     if (!user) {
@@ -64,8 +67,9 @@ const login = async (req, res) => {
     res
       .cookie("token", token, {
         httpOnly: true,
-        secure: true,
-        sameSite: "strict",
+        secure: false,       // must be false for localhost (HTTP)
+        sameSite: "lax",    // allows cookie to be sent from frontend
+        maxAge: 3600000,    // 1 hour in ms
       })
       .status(200)
       .json(userInfo);
@@ -73,5 +77,8 @@ const login = async (req, res) => {
     res.status(500).json({ message: "Failed to login" });
   }
 };
+const logout = async (req, res) => {
+  res.clearCookie("token").status(200).json({ message: "Logout Successful" });
+};
 
-export { register, login };
+export { register, login, logout };

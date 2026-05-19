@@ -71,6 +71,51 @@ nav {
       color: white;
       border-radius: 5px;
     }
+    .user {
+      display: flex;
+      align-items: center;
+      font-weight: bold;
+
+      img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      span {
+        @include sm {
+          display: none;
+        }
+      }
+
+      .profile {
+        padding: 10px 20px;
+        background-color: #fece51;
+        color: white;
+        border-radius: 5px;
+        font-weight: bold;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .notification {
+          position: absolute;
+          top: -8px;
+          right: -8px;
+          background-color: red;
+          color: white;
+          border-radius: 50%;
+          width: 24px;
+          height: 24px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 14px;
+        }
+      }
+    }
     .menuIcon {
       display: none;
       z-index: 999;

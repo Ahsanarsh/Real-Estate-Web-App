@@ -47,7 +47,7 @@ function NewPostPage() {
       navigate("/" + res.data.id);
     } catch (err) {
       console.log(err);
-      setError(error);
+      setError(err.response?.data?.message || "Failed to create post");
     }
   };
 
@@ -153,7 +153,7 @@ function NewPostPage() {
               <input min={0} id="restaurant" name="restaurant" type="number" />
             </div>
             <button className="sendButton">Add</button>
-            {error && <span>error</span>}
+            {error && <span className="errorMsg">{error}</span>}
           </form>
         </div>
       </div>
@@ -164,7 +164,7 @@ function NewPostPage() {
         <UploadWidget
           uwConfig={{
             multiple: true,
-            cloudName: "lamadev",
+            cloudName: "dcuwio3tb",
             uploadPreset: "estate",
             folder: "posts",
           }}

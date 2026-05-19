@@ -14,6 +14,13 @@ export const listPageLoader = async ({ request, params }) => {
 };
 
 export const profilePageLoader = async () => {
+  const user = JSON.parse(localStorage.getItem("user"));
+  if (!user) {
+    return defer({
+      postResponse: Promise.resolve({ data: [] }),
+      chatResponse: Promise.resolve({ data: [] }),
+    });
+  }
   const postPromise = apiRequest("/users/profilePosts");
   const chatPromise = apiRequest("/chats");
   return defer({

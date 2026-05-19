@@ -1,7 +1,46 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./card.scss";
+import { useContext, useState } from "react";
+import { AuthContext } from "../../context/AuthContext";
+import apiRequest from "../../lib/api.request";
 
 function Card({ item }) {
+  const { currentUser } = useContext(AuthContext);
+  const navigate = useNavigate();
+  // Using a local state for save to give immediate feedback, though it starts false for list items without full backend population
+  const [saved, setSaved] = useState(false);
+
+  const handleSave = async (e) => {
+    e.preventDefault();
+    if (!currentUser) {
+      return navigate("/login");
+    }
+    setSaved((prev) => !prev);
+    try {
+      await apiRequest.post("/users/save", { postId: item.id });
+    } catch (err) {
+      console.log(err);
+      setSaved((prev) => !prev);
+    }
+  };
+
+  const handleChat = async (e) => {
+    e.preventDefault();
+    if (!currentUser) {
+      return navigate("/login");
+    }
+    // Prevent creating chat with oneself
+    if (currentUser.id === item.userId) {
+      return navigate("/profile");
+    }
+    try {
+      await apiRequest.post("/chats", { receiverId: item.userId });
+      navigate("/profile");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <div className="card">
       <Link to={`/${item.id}`} className="imageContainer">
@@ -28,11 +67,20 @@ function Card({ item }) {
             </div>
           </div>
           <div className="icons">
-            <div className="icon">
-              <img src="/save.png" alt="" />
+            <div 
+              className="icon" 
+              onClick={handleSave} 
+              style={{ backgroundColor: saved ? "#fece51" : "white" }}
+              title="Save Post"
+            >
+              <img src="/save.png" alt="Save" />
             </div>
-            <div className="icon">
-              <img src="/chat.png" alt="" />
+            <div 
+              className="icon" 
+              onClick={handleChat}
+              title="Message Owner"
+            >
+              <img src="/chat.png" alt="Message" />
             </div>
           </div>
         </div>
